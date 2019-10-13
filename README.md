@@ -14,4 +14,11 @@
 12. Use WinSCP to move the post-cutadapt QA/QC files to the Resource Announcement file on my H: drive
 13. Post-cutadapt R1 QA/QC: file:///H:/BL5300/Resource%20Announcement/Ang27_R1.cutadapt_fastqc.html - Failures for "Per tile sequence quality" and "Per base sequence content" - Warnings for "Sequence Length Distribution
 14. Post-cutadapt R2 QA/QC: file:///H:/BL5300/Resource%20Announcement/Ang27_R2.cutadapt_fastqc.html - Failures for "Per base sequence quality", "Per tile sequence quality and "Per base sequence content" - Warnings for "Sequence Length Distribution
-15.
+15. Made directory for assembly: "mkdir de_novo_assembly
+16. Moved Ang27_R1.cutadapt.fastq and Ang27_R2.cutadapt.fastq to de_novo_assembly via WinSCP
+17. Activate miniconda environment: conda activate de_novo
+18 Assemble the genome using SPAdes:  spades.py -k 21,51,71,91,111,127 --careful --pe1-1 Ang27_R1.cutadapt.fastq --pe1-2 Ang27_R2.cutadapt.fastq -o Ang27_spades_output
+19. Go into new directory: cd Ang27_spades_output
+20. Use QUAST to determine the quality of my assembly:  quast contigs.fasta -o Ang27_quast_contigs
+21. Use WinSCP to move the report to my desktop and then view the report: file:///H:/BL5300/Resource%20Announcement/Ang27_quast.contigs.html
+22. QUAST determined the following results: Number of contigs - 1186; GC content - 40.8%; Largest contig - 305,214; N50 - 108,405
