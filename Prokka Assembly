@@ -11,3 +11,5 @@
    awk '/^>/{print ">Ang27_" ++i; next}{print}' < contigs.fasta > contigs_names.fasta
 5. Run the prokka command on the new contigs_names.fasta file
    prokka --outdir Ang27 --prefix T1 contigs_names.fasta
+6. Now we have all of the information in the file Ang27:
+  /scratch_30_day_tmp/wadion/resource_announcement/Ang27_prokka_annotation/Ang27
