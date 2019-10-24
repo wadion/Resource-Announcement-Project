@@ -1,3 +1,6 @@
+#Download Prokka
+  conda create -n annotation prokka augustus
+
 1. Annotate the Angola 27 genome with Prokka
 2. Move to scratch and make a new folder for the annotation in the Resource Announcement folder:
   cd scratch
