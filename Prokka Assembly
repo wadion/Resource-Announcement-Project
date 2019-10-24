@@ -6,4 +6,8 @@
   cd Ang27_prokka_annotation
 3. Move the SPAdes assembly to a new file titled Ang27_prokka_annotation: 
   cp de_novo_assembly/Ang27_spades_output/contigs.fasta Ang27_prokka_annotation
-4. 
+  cd Ang27_prokka_annotation
+4. Prepare the file for Prokka with the "awk" filter:
+   awk '/^>/{print ">Ang27_" ++i; next}{print}' < contigs.fasta > contigs_names.fasta
+5. Run the prokka command on the new contigs_names.fasta file
+   prokka --outdir Ang27 --prefix T1 contigs_names.fasta
