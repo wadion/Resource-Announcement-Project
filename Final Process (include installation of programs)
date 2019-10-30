@@ -1,1 +1,23 @@
-
+i. Tools that have been downloaded for class that are needed for this project
+i.a. download biopython package
+  pip install --user biopython
+i.b. download and install Miniconda, allow miniconda to access bioconda repository
+  cd ~
+  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  bash Miniconda3-latest-Linux-x86_64.sh
+  source ~/.bashrc
+  conda config --add channels defaults
+  conda config --add channels bioconda
+  conda config --add channels conda-forge
+1.c. Install fastqc for QA/QC
+  conda install fastqc
+1.d. Install script to download data from Google Drive
+  cd ~
+  mkdir software
+  cd software
+  wget https://raw.githubusercontent.com/circulosmeos/gdown.pl/master/gdown.pl
+  chmod +x gdown.pl
+  nano ~/.bashrc
+  export PATH="~/software/:$PATH"
+  source ~/.bashrc
+1.e. Install cutadapt for QA/QC
