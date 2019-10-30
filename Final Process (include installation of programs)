@@ -9,9 +9,9 @@ i.b. download and install Miniconda, allow miniconda to access bioconda reposito
   conda config --add channels defaults
   conda config --add channels bioconda
   conda config --add channels conda-forge
-1.c. Install fastqc for QA/QC
+i.c. Install fastqc for QA/QC
   conda install fastqc
-1.d. Install script to download data from Google Drive
+i.d. Install script to download data from Google Drive
   cd ~
   mkdir software
   cd software
@@ -20,11 +20,52 @@ i.b. download and install Miniconda, allow miniconda to access bioconda reposito
   nano ~/.bashrc
   export PATH="~/software/:$PATH"
   source ~/.bashrc
-1.e. Install cutadapt for QA/QC
+i.e. Install cutadapt for QA/QC
   conda install cutadapt
-1.f. Install SPAdes for de novo genome assembly
+i.f. Install SPAdes for de novo genome assembly
   conda create -n de_novo -c bioconda -c conda-forge fastqc=0.11.5 \
              trimmomatic=0.36 spades=3.11.1 quast=5.0.2 \
              bowtie2=2.2.5 java-jdk=8.0.112 --yes
-1.g. Install Prokka for genome annotation
+i.g. Install Prokka for genome annotation
   conda create -n annotation prokka augustus
+
+# Resource-Announcement-Project Angola-27
+# This is all being done in the Resource Announcement directory in the /scratch_30_day_tmp/wadion pathway
+1. Download Angola 27 Read 1: gdown.pl https://drive.google.com/file/d/1cj-Trrc62XB5SgfRNQkj0QgDKwIx8ViC/edit Ang27_R1.fastq.gz
+2. Download Angola 27 Read 2: gdown.pl https://drive.google.com/file/d/14CNdXmNe6umynWgBkFPiGmBT-LY6jept/edit Ang27_R2.fastq.gz
+3. Read 1 QA/QC: fastqc Ang27_R1.fastq.gz
+4. Read 2 QA/QC: fastqc Ang27_R2.fastq.gz
+5. Use WinSCP to move the QA/QC files to the Resource Announcement file on my H: drive
+6. R1 QA/QC: file:///H:/BL5300/Resource%20Announcement/Ang27_R1_fastqc.html - Failures for "Per tile sequence quality" and "Per base sequence content" - Warnings for "Per base sequence quality", "Per sequence GC content", "Sequence Length Distribution", and "Overrepresented sequences"
+7. R2 QA/QC: file:///H:/BL5300/Resource%20Announcement/Ang27_R2_fastqc.html - Failures for "Per base sequence quality", "Per tile sequence quality", "Per base sequence content", and "Per base N content" - Warnings for "Sequence Length Distribution" and "Overrepresented sequences"
+8. Use cutadapt for read 1(R1) and read 2(R2)
+9. QA/QC using cutadapt: cutadapt -q 20,20 -a CTGTCTCTTATACACATCTCCGAGCCCACGAGAC -A CTGTCTCTTATACACATCTGACGCTGCCGACGA -m 50 --max-n 0 -o Ang27_R1.cutadapt.fastq -p Ang27_R2.cutadapt.fastq Ang27_R1.fastq.gz Ang27_R2.fastq.gz
+10. Post-cutadapt Read 1 QA/QC: fastqc Ang27_R1.cutadapt.fastq
+11. Post-cutadapt Read 2 QA/QC: fastqc Ang27_R2.cutadapt.fastq
+12. Use WinSCP to move the post-cutadapt QA/QC files to the Resource Announcement file on my H: drive
+13. Post-cutadapt R1 QA/QC: file:///H:/BL5300/Resource%20Announcement/Ang27_R1.cutadapt_fastqc.html - Failures for "Per tile sequence quality" and "Per base sequence content" - Warnings for "Sequence Length Distribution
+14. Post-cutadapt R2 QA/QC: file:///H:/BL5300/Resource%20Announcement/Ang27_R2.cutadapt_fastqc.html - Failures for "Per base sequence quality", "Per tile sequence quality and "Per base sequence content" - Warnings for "Sequence Length Distribution
+15. Made directory for assembly: "mkdir de_novo_assembly
+16. Moved Ang27_R1.cutadapt.fastq and Ang27_R2.cutadapt.fastq to de_novo_assembly via WinSCP
+17. Activate miniconda environment: conda activate de_novo
+18  Assemble the genome using SPAdes:  spades.py -k 21,51,71,91,111,127 --careful --pe1-1 Ang27_R1.cutadapt.fastq --pe1-2 Ang27_R2.cutadapt.fastq -o Ang27_spades_output
+19. Go into new directory: cd Ang27_spades_output
+20. Use QUAST to determine the quality of my assembly:  quast contigs.fasta -o Ang27_quast_contigs
+21. Use WinSCP to move the report to my desktop and then view the report: file:///H:/BL5300/Resource%20Announcement/Ang27_quast.contigs.html
+22. QUAST determined the following results: Number of contigs - 1186; GC content - 40.8%; Largest contig - 305,214; N50 - 108,405
+23. Annotate the Angola 27 genome with Prokka
+24. Move to scratch and make a new folder for the annotation in the Resource Announcement folder:
+  cd scratch
+  cd resource_announcement
+  mkdir Ang27_prokka_annotation
+  cd Ang27_prokka_annotation
+25. Move the SPAdes assembly to a new file titled Ang27_prokka_annotation: 
+  cp de_novo_assembly/Ang27_spades_output/contigs.fasta Ang27_prokka_annotation
+  cd Ang27_prokka_annotation
+26. Prepare the file for Prokka with the "awk" filter:
+   awk '/^>/{print ">Ang27_" ++i; next}{print}' < contigs.fasta > contigs_names.fasta
+27. Run the prokka command on the new contigs_names.fasta file
+   prokka --outdir Ang27 --prefix T1 contigs_names.fasta
+28. Now we have all of the information in the file Ang27:
+  /scratch_30_day_tmp/wadion/resource_announcement/Ang27_prokka_annotation/Ang27
+29. 
